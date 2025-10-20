@@ -5,7 +5,7 @@ import {
   IonLabel, IonSelect, IonSelectOption, IonTitle, IonToolbar,
   IonList, IonGrid, IonRow, IonCol
 } from '@ionic/angular/standalone';
-import { NgIf, NgFor } from '@angular/common';
+import { NgIf, NgFor, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 declare var ImageCapture: any;
@@ -14,14 +14,12 @@ declare var ImageCapture: any;
   selector: 'app-home',
   standalone: true,
   imports: [
-    
     IonHeader, IonToolbar, IonTitle, IonContent,
     IonCard, IonCardHeader, IonCardTitle, IonCardContent,
     IonButton, IonItem, IonLabel, IonInput,
     IonSelect, IonSelectOption, IonList,
     IonGrid, IonRow, IonCol,
-    
-    NgIf, NgFor, FormsModule
+    NgIf, NgFor, FormsModule, DecimalPipe
   ],
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss']
@@ -32,6 +30,16 @@ export class HomePage {
   pagador: string = '';
   fotoData: string | null = null;
   gastos: any[] = [];
+
+  get totalGastos(): number {
+    return this.gastos.reduce((acc, g) => acc + parseFloat(g.monto), 0);
+  }
+
+  get promedioPorCuenta(): number {
+    if (this.gastos.length === 0) return 0;
+    const personas = new Set(this.gastos.map(g => g.pagador)).size;
+    return personas > 0 ? this.totalGastos / personas : 0;
+  }
 
   async tomarFoto() {
     try {
@@ -44,8 +52,7 @@ export class HomePage {
       const reader = new FileReader();
       reader.onloadend = () => (this.fotoData = reader.result as string);
       reader.readAsDataURL(blob);
-    } catch (e) {
-      // Si no hay cámara, usa una imagen simulada
+    } catch {
       const response = await fetch('https://ionicframework.com/docs/img/demos/card-media.png');
       const blob = await response.blob();
       const reader = new FileReader();

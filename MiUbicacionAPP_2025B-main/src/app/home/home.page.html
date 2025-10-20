@@ -6,6 +6,15 @@
 
 <ion-content class="ion-padding">
 
+  <ion-card *ngIf="gastos.length > 0">
+    <ion-card-header>
+      <ion-card-title>Reporte de Gastos</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>Total de gastos:</strong> ${{ totalGastos | number:'1.2-2' }}</p>
+      <p><strong>Promedio por persona:</strong> ${{ promedioPorCuenta | number:'1.2-2' }}</p>
+    </ion-card-content>
+  </ion-card>
 
   <ion-card>
     <ion-card-header>
@@ -25,9 +34,9 @@
       <ion-item>
         <ion-label position="stacked">Quien paga</ion-label>
         <ion-select [(ngModel)]="pagador" placeholder="Seleccionar persona">
-          <ion-select-option value="Juan">Joel</ion-select-option>
-          <ion-select-option value="María">Kev</ion-select-option>
-          <ion-select-option value="Pedro">Bry</ion-select-option>
+          <ion-select-option value="Joel">Joel</ion-select-option>
+          <ion-select-option value="Kev">Kev</ion-select-option>
+          <ion-select-option value="Bry">Bry</ion-select-option>
         </ion-select>
       </ion-item>
 
@@ -45,10 +54,9 @@
     <ion-card-header>
       <ion-card-title>Gastos Recientes</ion-card-title>
     </ion-card-header>
-
     <ion-card-content>
       <div *ngFor="let g of gastos" class="gasto-item">
-        <h2>{{ g.descripcion }}  <strong>${{ g.monto }}</strong></h2>
+        <h2>{{ g.descripcion }} <strong>${{ g.monto }}</strong></h2>
         <p>Pagado por: {{ g.pagador }}</p>
         <p>{{ g.fecha }}</p>
         <hr />
@@ -60,16 +68,13 @@
     <ion-card-header>
       <ion-card-title>Galeria de recibos</ion-card-title>
     </ion-card-header>
-
     <ion-card-content>
       <div *ngFor="let g of gastos" class="recibo-item">
-        <h2>{{ g.descripcion }}  ${{ g.monto }}</h2>
+        <h2>{{ g.descripcion }} ${{ g.monto }}</h2>
         <p><strong>Pagado por:</strong> {{ g.pagador }}</p>
-        <p><strong>fecha y hora:</strong> {{ g.fecha }}</p>
+        <p><strong>Fecha y hora:</strong> {{ g.fecha }}</p>
         <img [src]="g.foto" alt="Recibo" />
       </div>
     </ion-card-content>
   </ion-card>
 </ion-content>
-
-
